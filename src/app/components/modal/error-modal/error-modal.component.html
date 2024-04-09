@@ -1,0 +1,16 @@
+<div class="modal-header d-flex align-items-center justify-content-between">
+    <h5 class="modal-title">{{column}}</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="handleClose()">
+    <span aria-hidden="true"></span>
+    </button>
+</div>
+<div class="modal-body my-3">
+    <p>{{errorMessage ?? ''}}</p>
+    <input class="form-control" (change)="handleInputChange($event)" [value]="value">
+</div>
+<div class="modal-footer">
+    <div class="btn-group">
+        <button type="button" class="btn btn-primary" (click)="handleSubmit(value)">Save changes</button>
+        <button type="button" class="btn btn-secondary" (click)="handleClose()">Close</button>
+    </div>
+</div>

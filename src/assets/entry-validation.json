@@ -1,0 +1,89 @@
+{
+    "columns": ["ID Number", "Full Name", "Institute email ID", "Department Code", "Department Name", "Category", "Category Type", "Designation", "HOD", "Dean", "Director", "Affiliation", "Affiliation Department Code", "Affiliation Department Name"],
+    "ID Number":{
+        "type": "string",
+        "required": true,
+        "regex": "^IITPKD\\d{3,}$",
+        "error": "Should be of the format IITPKDxxx"
+    },
+    
+    "Full Name": {
+        "type": "string",
+        "required": true,
+        "regex": "^[A-Za-z. ]+$",
+        "error": "Alphabets only"
+    },
+    "Institute email ID": {
+        "type": "string",
+        "required": true,
+        "regex": "^[a-zA-Z0-9._%+-]+@(iitpkd|smail\\.iitpkd)\\.ac\\.in$",
+        "error": "Should be of the format user@iitpkd.ac.in"
+    },
+    
+    "Department Code": {
+        "type": "string",
+        "required": true,
+        "regex": "^[A-Z_]+$",
+        "error": "Only capital letters and underscores are allowed"
+    },
+    "Department Name": {
+        "type": "string",
+        "required": true,
+        "regex": "^[A-Za-z ]+$",
+        "error": "Alphabets only"
+    },
+    "Category": {
+        "type": "string",
+        "required": false,
+        "enum":["Student","Faculty","Research Scholar","student","faculty","research scholar"],
+        "error": "Should be one of: Student, Faculty, Research Scholar"
+    },
+    "Category Type": {
+        "type": "string",
+        "required": false,
+        "regex": "^[A-Za-z ]*$",
+        "error": "Alphabets only"
+    },
+    "Designation":{
+        "type": "string",
+        "required": true,
+        "regex": "^[A-Za-z ]+$",
+        "error": "Alphabets only"
+    },
+    "HOD":{
+        "type": "string",
+        "required": false,
+        "enum":["Y"],
+        "error": "Should be 'Y' or empty"
+    },
+    "Dean":{
+        "type": "string",
+        "required": false,
+        "enum":["Y"],
+        "error": "Should be 'Y' or empty"
+    },
+    "Director":{
+        "type": "string",
+        "required": false,
+        "enum":["Y"],
+        "error": "Should be 'Y' or empty"
+    },
+    "Affiliation":{
+        "type": "string",
+        "required": false,
+        "enum":["Y"],
+        "error": "Should be 'Y' or empty"
+    },
+    "Affiliation Department Code": {
+        "type": "string",
+        "required": false,
+        "regex": "^[A-Z_]+$",
+        "error": "Only capital letters and underscores are allowed"
+    },
+    "Affiliation Department Name": {
+        "type": "string",
+        "required": false,
+        "regex": "^[A-Za-z ]+$",
+        "error": "Alphabets only"
+    }
+}

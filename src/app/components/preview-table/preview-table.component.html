@@ -1,0 +1,82 @@
+<div class="w-100 p-2 d-flex justify-content-between align-items-center">
+    @if(!uploadedDataHasNoErrors()) {
+        <div class="form-check form-switch py-2">
+            <input class="form-check-input" type="checkbox" id="viewErrorsOnly" [checked]="showErrorsOnly" (change)="setShowErrorsOnly($event)">
+            <label class="form-check-label" for="viewErrorsOnly">See rows with errors only</label>
+        </div>
+    }
+    <div class="d-flex gap-4 align-items-center">
+        <label for="searchTable" class="text-nowrap">Search:</label>
+        <input id="searchTable" [value]="searchTerm" (change)="setSearchTerm($event)">
+    </div>
+    <div class="d-flex gap-4 align-items-center">
+        <label for="pageSizeSelect" class="text-nowrap">Page Size</label>
+        <select class="form-select" id="pageSizeSelect" (change)="setPageSize($event)">
+            @for (size of pageSizes; track size) {
+                <option [value]="size" [selected]="size === pageSize">{{size}}</option>
+            }
+        </select>
+    </div>
+</div>
+<div class="position-relative">
+<table
+    class="table table-bordered"
+    >
+    <thead>
+        <tr>
+            <td></td>
+            <td scope="col" (click)="sortDataByID()"><button class="btn">#</button></td>
+            @for(column of columns; track column) {
+                <td scope="col" (click)="sortData(column)" class="text-nowrap pe-2"><button class="btn">{{column}}</button></td>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @for (uploadedDataRecord of getPaginatedDataToDisplay(); track uploadedDataRecord.id) {
+            <tr >
+                @if (!uploadedDataRecord.isLoading) {
+                    <td [class]="uploadedDataRecord.errors.length > 0 ? 'table-danger' : 'table-success'">
+                        @if (uploadedDataRecord.errors.length > 0) {
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                            </svg>
+                        } @else {
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
+                                <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
+                            </svg>
+                        }
+                    </td>
+                } @else {
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                }
+                <td>{{uploadedDataRecord.id}}</td>
+                @for (column of columns; track column) {
+                    <td [class]="'m-auto ' + !uploadedDataRecord.isLoading && uploadedDataRecord.hasValidated && columnHasError(uploadedDataRecord, column) ? 'table-danger' : ''">
+                        <span class="text-nowrap d-flex justify-content-between align-items-center" (click)="setOpenedError(uploadedDataRecord, column)">{{uploadedDataRecord.data[column] || '-'}}
+                            @if (!uploadedDataRecord.isLoading && uploadedDataRecord.hasValidated && columnHasError(uploadedDataRecord, column)) {
+                                <button [title]="getColumnError(uploadedDataRecord, column)" class="btn badge bg-danger rounded-pill" >!</button>
+                            }
+                        </span>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+@if (openedError !== undefined) {
+    <dialog [open]="openedError !== undefined" class="border-light top-50">
+        <app-error-modal [column]="openedError.column" [errorMessage]="getColumnError(openedError.uploadedDataRecord, openedError.column)" [handleSubmit]="getSubmitHandler(openedError.uploadedDataRecord, openedError.column)" [handleClose]="resetOpenedError" [value]="openedError.uploadedDataRecord.data[openedError.column]"></app-error-modal>
+    </dialog>
+}
+</div>
+
+<div class="d-flex justify-content-between p-2">
+	<ngb-pagination
+		[collectionSize]="getUploadedDataToDisplay().length"
+		[(page)]="page"
+		[pageSize]="pageSize"
+	>
+	</ngb-pagination>
+</div>

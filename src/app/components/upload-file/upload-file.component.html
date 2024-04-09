@@ -1,0 +1,5 @@
+<div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center flex-column gap-3">
+    <img src="assets/images/upload-file.svg" alt="upload" class="uploadsvg opacity-75" id="upload-image">
+    <span>Drag &amp; Drop your files here, or click to browse</span>
+</div>
+<input type="file" accept=".xlsx,.csv" (change)="onFileUpload($event)" class="w-100 h-100 m-2 p-2 opacity-0"/>
